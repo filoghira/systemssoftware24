@@ -22,8 +22,8 @@ vector_table:
 
 /* Reset Handler */
 reset_handler:
-    /* Disable interrupts in ARM mode */
-    cpsid i                          /* Disable IRQ interrupts */
+    /* Disable interrupts */
+    cpsid i
 
     /* Set up stacks for each mode */
     ldr sp, =stack_top              /* Supervisor mode stack */

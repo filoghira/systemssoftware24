@@ -2,6 +2,6 @@
 #define MEM_SETUP_H
 
 // Function declaration for memory remapping
-void memory_remap();
+void remap_memory();
 
-#endif // MEM_SETUP_H
+#endif

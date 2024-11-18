@@ -1,13 +1,9 @@
 #include "memory_map.h"
 #include "exception_handlers.h"
 
-// Function to initialize memory mapping (IVT remapping)
-void memory_remap() {
-    // Assuming memory is already mapped at address 0x0
-    // and IVT is located in a fixed region in ROM
-    // The remap code will copy IVT into writable memory
-    unsigned int *ivt = (unsigned int *) 0x10000000;  // New location in RAM
-    unsigned int *ivt_orig = (unsigned int *) 0x00000000;  // Original IVT in ROM
+void remap_memory() {
+    unsigned int *ivt = (unsigned int *) 0x10000000;
+    unsigned int *ivt_orig = (unsigned int *) 0x00000000;
 
     // Copy IVT entries
     for (int i = 0; i < 16; i++) {

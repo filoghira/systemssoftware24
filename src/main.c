@@ -2,7 +2,7 @@
 #include "memory_map.h"
 
 int main() {
-    memory_remap();  // Map writable memory for the IVT
+    remap_memory();
 
     while (1) {
         my_printf("Choose an exception to trigger:\n");

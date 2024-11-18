@@ -5,7 +5,7 @@ TARGET = kernel.elf
 CC = arm-none-eabi-gcc
 LD = arm-none-eabi-ld
 OBJCOPY = arm-none-eabi-objcopy
-CFLAGS = -O0 -g -Wall -nostdlib -nostartfiles
+CFLAGS = -O0 -g -Wall -nostdlib -nostartfiles -march=armv7-a
 LDFLAGS = -T kernel.lds
 
 # Source Files
