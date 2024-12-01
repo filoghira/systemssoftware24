@@ -1,30 +1,26 @@
 #include "serial_driver.h"
-#include "memory_map.h"
+#include "timer.h"
+#include "utils.h"
+#include "interrupts.h"
+
+void test_application() {
+    while (1) {
+        my_printf("Press a key: ");
+        char c = receive_char();  // Wait for input
+        my_printf("\nReceived: %c\n", c);
+
+        for (int i = 0; i < 20; i++) {
+            my_printf("%c", c);  // Simulate computation
+            delay(100);          // Small delay
+        }
+        my_printf("\n");
+    }
+}
 
 int main() {
-    remap_memory();
-
-    while (1) {
-        my_printf("Choose an exception to trigger:\n");
-        my_printf("1. Undefined Instruction\n2. Data Abort\n3. Software Interrupt\n");
-
-        char choice = receive_char();
-
-        switch (choice) {
-            case '1':
-                asm volatile (".word 0xE7F000F0");  // Trigger Undefined Instruction
-                break;
-            case '2':
-                *(volatile int *)0xDEADBEEF = 42;  // Trigger Data Abort
-                break;
-            case '3':
-                asm volatile ("swi 0");  // Trigger SWI
-                break;
-            default:
-                my_printf("Invalid choice!\n");
-                break;
-        }
-    }
-
+    init_system_timer(1);       // 1Hz timer interrupts
+    init_dbg_interrupts();      // Enable DBGU interrupts
+    enable_interrupts();        // Enable global IRQs
+    test_application();         // Run the application
     return 0;
 }

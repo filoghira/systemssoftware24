@@ -20,4 +20,10 @@ SECTIONS {
         stack_abort_top = . + 256;     /* Stack size for Abort Mode */
         stack_abort_base = .;
     } > RAM
+
+    .stack_irq (NOLOAD) :
+    {
+        stack_irq_top = . + 256;  /* Stack size for IRQ mode (256 bytes) */
+        stack_irq_base = .;       /* Base of the IRQ stack */
+    } > RAM
 }

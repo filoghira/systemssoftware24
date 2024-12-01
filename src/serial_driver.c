@@ -1,5 +1,7 @@
 #include <stdarg.h>
 #include <stdint.h>
+#include "serial_driver.h"
+#include "aic.h"
 
 // UART base address for VersatilePB
 #define UART_BASE      0x9000000
@@ -11,6 +13,19 @@
 #define THR_READY      (1 << 5)  // Transmitter Holding Register is ready
 #define RHR_READY      (1 << 0)  // Receiver Holding Register has data
 
+volatile char buffer = '\0';
+
+void init_dbg_interrupts() {
+    DBGU_BASE->DBGU_IER = (1 << 0); // Enable Receiver Ready interrupt
+    configure_interrupt(DBGU_IRQ, dbgu_handler);
+}
+
+void dbgu_handler() {
+    if (DBGU_BASE->DBGU_SR & (1 << 0)) { // Check Receiver Ready
+        buffer = DBGU_BASE->DBGU_RHR;    // Read the received character
+    }
+}
+
 // Send a character over the serial interface
 void send_char(char c) {
     while (FR & THR_READY);  // Wait until the THR is ready
@@ -19,8 +34,10 @@ void send_char(char c) {
 
 // Receive a character from the serial interface
 char receive_char() {
-    while (FR & RHR_READY);  // Wait until there is data in the RHR
-    return RHR;  // Read character from the RHR
+    while (buffer == '\0'); // Wait for data
+    char c = buffer;
+    buffer = '\0';          // Clear buffer
+    return c;
 }
 
 // Helper function to convert an integer to hexadecimal string

@@ -5,6 +5,12 @@
 
 /* Entry Point */
 _start:
+    /* Switch to IRQ mode and set its stack pointer */
+    msr CPSR_c, #0x92       /* Change to IRQ mode (Mode: 0b10010) */
+    ldr sp, =stack_irq_top  /* Set SP for IRQ mode */
+
+    /* Return to Supervisor mode */
+    msr CPSR_c, #0x13
     b reset_handler         /* Branch to Reset Handler */
 
 /* Interrupt Vector Table */
