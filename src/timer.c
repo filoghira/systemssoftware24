@@ -1,6 +1,8 @@
 #include "timer.h"
 #include "aic.h"
 #include "serial_driver.h"
+#include "scheduler.h"
+#include "threads.h"
 
 void init_system_timer(uint32_t frequency_hz) {
     uint32_t timer_clock = 32768; // Typical clock for PIT
@@ -11,6 +13,7 @@ void init_system_timer(uint32_t frequency_hz) {
 }
 
 void system_timer_handler() {
-    ST_BASE->PITC_PIVR; // Clear interrupt by reading PIVR
-    my_printf("!\n");  // Output exclamation mark
+    ST_BASE->PITC_PIVR;  // Clear timer interrupt
+    my_printf("!\n");    // Print timer interrupt indicator
+    schedule();          // Trigger the scheduler
 }

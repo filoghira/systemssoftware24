@@ -9,7 +9,7 @@ CFLAGS = -O0 -g -Wall -nostdlib -nostartfiles -march=armv7-a
 LDFLAGS = -lc -lnosys -T kernel.lds
 
 # Source Files
-SRC_C = src/main.c src/serial_driver.c src/exception_handlers.c src/memory_map.c src/aic.c src/interrupts.c src/timer.c src/utils.c
+SRC_C = src/main.c src/serial_driver.c src/exception_handlers.c src/memory_map.c src/aic.c src/interrupts.c src/timer.c src/utils.c src/threads.c src/scheduler.c
 SRC_ASM = asm/start.S asm/exception_vector_table.S asm/stack_init.S asm/uidiv.S
 
 # Include Directories

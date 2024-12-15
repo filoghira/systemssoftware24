@@ -2,6 +2,24 @@
 #include "timer.h"
 #include "utils.h"
 #include "interrupts.h"
+#include "threads.h"
+#include "scheduler.h"
+#include <stdlib.h>
+
+void main_thread() {
+    while (1) {
+        my_printf("Main thread is running\n");
+        delay(500);
+    }
+}
+
+void secondary_thread() {
+    for (int i = 0; i < 10; i++) {
+        my_printf("Secondary thread: iteration %d\n", i);
+        delay(100);
+    }
+    terminate_thread();
+}
 
 void test_application() {
     while (1) {
@@ -18,9 +36,18 @@ void test_application() {
 }
 
 int main() {
-    init_system_timer(1);       // 1Hz timer interrupts
-    init_dbg_interrupts();      // Enable DBGU interrupts
-    enable_interrupts();        // Enable global IRQs
-    test_application();         // Run the application
+    threads_init();
+    scheduler_init();
+    init_system_timer(10);  // Configure a timer interrupt every 100ms
+    enable_interrupts();
+
+    create_thread(main_thread, NULL);      // If no argument is needed
+    create_thread(secondary_thread, NULL); // If no argument is needed
+
+
+    while (1) {
+        // Idle loop
+    }
+
     return 0;
 }

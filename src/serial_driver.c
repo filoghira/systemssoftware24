@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include "serial_driver.h"
 #include "aic.h"
+#include "interrupts.h"
 
 // UART base address for VersatilePB
 #define UART_BASE      0x9000000
@@ -18,12 +19,6 @@ volatile char buffer = '\0';
 void init_dbg_interrupts() {
     DBGU_BASE->DBGU_IER = (1 << 0); // Enable Receiver Ready interrupt
     configure_interrupt(DBGU_IRQ, dbgu_handler);
-}
-
-void dbgu_handler() {
-    if (DBGU_BASE->DBGU_SR & (1 << 0)) { // Check Receiver Ready
-        buffer = DBGU_BASE->DBGU_RHR;    // Read the received character
-    }
 }
 
 // Send a character over the serial interface

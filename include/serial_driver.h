@@ -28,7 +28,6 @@ typedef struct {
 
 // Function prototypes
 void init_dbg_interrupts();
-void dbgu_handler();
 void send_char(char c);
 char receive_char();
 void my_printf(const char *format, ...);
