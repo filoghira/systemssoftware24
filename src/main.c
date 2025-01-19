@@ -1,52 +1,33 @@
-#include "serial_driver.h"
+#include "serial_driver.h"  // Include the header for serial functions
+#include "threads.h"         // Include the thread functions (you'll need to define them)
+#include "scheduler.h"       // Include the scheduler (you'll need to implement it)
+#include "utils.h"           // Include utility functions (like delay)
 #include "timer.h"
-#include "utils.h"
-#include "interrupts.h"
-#include "threads.h"
-#include "scheduler.h"
-#include <stdlib.h>
 
-void main_thread() {
-    while (1) {
-        my_printf("Main thread is running\n");
-        delay(500);
-    }
-}
+void thread_function(void *arg) {
+    char received_char = *(char *)arg;
 
-void secondary_thread() {
+    // Print the character repeatedly with pauses
     for (int i = 0; i < 10; i++) {
-        my_printf("Secondary thread: iteration %d\n", i);
-        delay(100);
-    }
-    terminate_thread();
-}
-
-void test_application() {
-    while (1) {
-        my_printf("Press a key: ");
-        char c = receive_char();  // Wait for input
-        my_printf("\nReceived: %c\n", c);
-
-        for (int i = 0; i < 20; i++) {
-            my_printf("%c", c);  // Simulate computation
-            delay(100);          // Small delay
-        }
-        my_printf("\n");
+        sys_print_char(received_char);  // Print the received character using system call
+        delay(500);                     // Wait for a while
     }
 }
 
-int main() {
-    threads_init();
-    scheduler_init();
-    init_system_timer(10);  // Configure a timer interrupt every 100ms
-    enable_interrupts();
 
-    create_thread(main_thread, NULL);      // If no argument is needed
-    create_thread(secondary_thread, NULL); // If no argument is needed
+int main(void) {
+    char c;
 
+    // Initialize the system (serial driver, scheduler, etc.)
+    init_system_timer(1000);  // Example timer initialization (adjust frequency as needed)
 
+    // Main loop: Wait for a character and create a thread to handle it
     while (1) {
-        // Idle loop
+        c = sys_read_char();  // Wait for a character from the user
+        sys_print_char(c);    // Echo the character
+
+        // Create a new thread to handle the received character
+        create_thread(thread_function, (void *)(&c));  // Pass the character as argument to the thread
     }
 
     return 0;

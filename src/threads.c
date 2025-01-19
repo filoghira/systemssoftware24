@@ -42,3 +42,13 @@ void terminate_thread(void) {
         simple_free(old_thread);  // Free resources
     }
 }
+
+// System call to create a thread
+void sys_create_thread(void (*function)(void *), void *arg) {
+    create_thread(function, arg);
+}
+
+// System call to terminate a thread
+void sys_terminate_thread(void) {
+    terminate_thread();
+}

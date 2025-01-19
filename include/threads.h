@@ -10,12 +10,18 @@ typedef struct Thread {
     void (*function)(void*);  // Function to be executed by the thread
     void *arg;                // Argument to be passed to the thread function
     struct Thread *next;      // Next thread in the queue
+    int blocked;
 } Thread;
 
-// Functions
-void threads_init();
-// In threads.h
-Thread *create_thread(void (*thread_func)(void *), void *arg);
-void terminate_thread();
+// Function to create a thread
+void sys_create_thread(void (*function)(void *), void *arg);
+
+// Function to terminate a thread
+void sys_terminate_thread(void);
+
+// Additional thread management functions
+Thread* create_thread(void (*function)(void *), void *arg);
+void terminate_thread(void);
+void threads_init(void);
 
 #endif // THREADS_H

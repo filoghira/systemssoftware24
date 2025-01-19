@@ -98,3 +98,13 @@ void my_printf(const char *format, ...) {
     
     va_end(args);
 }
+
+// System call to print a character
+void sys_print_char(char c) {
+    send_char(c);  // Send the character over UART
+}
+
+// System call to read a character
+char sys_read_char(void) {
+    return receive_char();  // Read character from UART
+}

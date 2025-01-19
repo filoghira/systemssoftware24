@@ -21,4 +21,10 @@ typedef struct {
 void init_system_timer(uint32_t frequency_hz);
 void system_timer_handler();
 
+// System call to delay a thread for a given time in milliseconds
+void sys_delay(int milliseconds);
+
+// Delay function for active waiting (e.g., busy-waiting)
+void delay(int milliseconds);
+
 #endif // TIMER_H

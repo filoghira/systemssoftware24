@@ -32,4 +32,10 @@ void send_char(char c);
 char receive_char();
 void my_printf(const char *format, ...);
 
+// Function to print a character
+void sys_print_char(char c);
+
+// Function to read a character
+char sys_read_char(void);
+
 #endif // SERIAL_DRIVER_H

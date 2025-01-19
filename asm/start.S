@@ -1,6 +1,7 @@
 /* start.S */
-.section .text
 .global _start
+
+.section .text
 .global reset_handler
 
 /* Entry Point */
@@ -8,6 +9,10 @@ _start:
     /* Switch to IRQ mode and set its stack pointer */
     msr CPSR_c, #0x92       /* Change to IRQ mode (Mode: 0b10010) */
     ldr sp, =stack_irq_top  /* Set SP for IRQ mode */
+
+    // Enable the SWI handler
+    mov r12, #0      // Set the SWI number for print character
+    swi 0            // Trigger the SWI handler
 
     /* Return to Supervisor mode */
     msr CPSR_c, #0x13
@@ -61,3 +66,5 @@ stack_undefined_top:
 stack_abort:
     .space 256     /* Stack size for Abort mode */
 stack_abort_top:
+
+.extern swi_handler

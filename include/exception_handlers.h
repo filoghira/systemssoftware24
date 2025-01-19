@@ -10,4 +10,7 @@ void reserved();
 void irq_handler();
 void fiq_handler();
 
+// SWI Handler for system calls
+void swi_handler(void);
+
 #endif

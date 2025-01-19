@@ -17,3 +17,8 @@ void system_timer_handler() {
     my_printf("!\n");    // Print timer interrupt indicator
     schedule();          // Trigger the scheduler
 }
+
+// System call to delay the thread
+void sys_delay(int milliseconds) {
+    delay(milliseconds);  // Use the existing delay function to block the thread
+}
